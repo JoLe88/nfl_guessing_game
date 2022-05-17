@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -56,7 +57,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public ArrayList<Datensatz> makeAllGamesFromSelectedSeasonIfNotInSaveGame(String season) {
-        ArrayList<Datensatz> allGamesFromSelectedSeason = new ArrayList<>();
+        ArrayList<Datensatz> listOfallGamesFromSelectedSeason = new ArrayList<>();
         int mapKey = 1;
 
         db = getReadableDatabase();
@@ -92,11 +93,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             datensatz.setStadium(cursor.getString(cursor.getColumnIndex("stadium")));
 
 
-            allGamesFromSelectedSeason.add(datensatz);
+            listOfallGamesFromSelectedSeason.add(datensatz);
             mapKey++;
         } while (cursor.moveToNext());
 
         cursor.close();
-        return allGamesFromSelectedSeason;
+        return listOfallGamesFromSelectedSeason;
+    }
+
+    public boolean isAllGamesFromSelectedSeasonJSONempty(String season) {
+        db = getReadableDatabase();
+        String query = "SELECT allGamesFromSelectedSeasonJSON FROM " + SAVEGAME_TABLE + " WHERE season LIKE " + season;
+        Cursor cursor = db.rawQuery(query, null);
+        cursor.moveToFirst();
+
+        if (cursor.getString(cursor.getColumnIndex("allGamesFromSelectedSeasonJSON")) == null) {
+            Log.d("allGamesFromSelectedSeasonJSON", "empty");
+            cursor.close();
+            return true;
+        } else {
+            Log.d("allGamesFromSelectedSeasonJSON", "Not empty");
+            cursor.close();
+            return false;
+        }
     }
 }

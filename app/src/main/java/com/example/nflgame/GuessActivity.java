@@ -27,7 +27,7 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
 
 
     static String SEASON;
-    ArrayList<Datensatz> allGamesFromSelectedSeason = new ArrayList<>();
+    ArrayList<Datensatz> listOfallGamesFromSelectedSeason = new ArrayList<>();
     GameObject currentGame = new GameObject();
     int mapKey = 1;
 
@@ -60,14 +60,14 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
         imageViewBackToSeasonList.setOnClickListener(this);
         imageViewDrop.setOnClickListener(this);
 
-        allGamesFromSelectedSeason = dbHelper.makeAllGamesFromSelectedSeasonIfNotInSaveGame(SEASON);
+        listOfallGamesFromSelectedSeason = dbHelper.makeAllGamesFromSelectedSeasonIfNotInSaveGame(SEASON);
 
 
-        readSaveGameFromDataBase();
+        boolean isAllGamesFromSelectedSeasonJSONempty = dbHelper.isAllGamesFromSelectedSeasonJSONempty(SEASON);
 
 //        makeAllGamesFromSelectedSeasonIfNotInSaveGame();
 //        setCurrentGame();
-        setTextViews();
+//        setTextViews();
 
     }
 
@@ -105,7 +105,7 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
             case R.id.imageViewBackToSeasonList:
                 saveGameIntoDatabase(true, false);
                 try {
-                    fromJSONtoAllGamesFromSelectedSeason(fromAllGamesFromSelectedSeasonToJsonString(allGamesFromSelectedSeason));
+                    fromJSONtoAllGamesFromSelectedSeason(fromAllGamesFromSelectedSeasonToJsonString(listOfallGamesFromSelectedSeason));
                 } catch (JsonProcessingException e) {
                     e.printStackTrace();
                 }
@@ -126,15 +126,15 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
     public void setCurrentGame() {
         int i = createRandomNumber();
 
-        currentGame.setGame_type(allGamesFromSelectedSeason.get(i).getGame_type());
-        currentGame.setWeek(allGamesFromSelectedSeason.get(i).getWeek());
+        currentGame.setGame_type(listOfallGamesFromSelectedSeason.get(i).getGame_type());
+        currentGame.setWeek(listOfallGamesFromSelectedSeason.get(i).getWeek());
 //        currentGame.setGameday(allGamesFromSelectedSeason.get(i).getGameday());
-        currentGame.setAway_team(allGamesFromSelectedSeason.get(i).getAway_team());
-        currentGame.setAway_score(allGamesFromSelectedSeason.get(i).getAway_score());
-        currentGame.setHome_team(allGamesFromSelectedSeason.get(i).getHome_team());
-        currentGame.setHome_score(allGamesFromSelectedSeason.get(i).getHome_score());
+        currentGame.setAway_team(listOfallGamesFromSelectedSeason.get(i).getAway_team());
+        currentGame.setAway_score(listOfallGamesFromSelectedSeason.get(i).getAway_score());
+        currentGame.setHome_team(listOfallGamesFromSelectedSeason.get(i).getHome_team());
+        currentGame.setHome_score(listOfallGamesFromSelectedSeason.get(i).getHome_score());
 
-        allGamesFromSelectedSeason.remove(i);
+        listOfallGamesFromSelectedSeason.remove(i);
     }
 
     public void setTextViews() {
@@ -152,14 +152,14 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
     public int createRandomNumber() {
         Random r = new Random();
         int low = 1;
-        int high = allGamesFromSelectedSeason.size();
+        int high = listOfallGamesFromSelectedSeason.size();
         return r.nextInt(high - low) + low;
     }
 
     public void buildNewLevel() {
 //        setCurrentGame();
         setTextViews();
-        Toast.makeText(this, "Noch " + allGamesFromSelectedSeason.size() + " Spiele in dieser Season.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Noch " + listOfallGamesFromSelectedSeason.size() + " Spiele in dieser Season.", Toast.LENGTH_SHORT).show();
     }
 
     public boolean ceckIfCorrectOrIncorrect(String choosen, String notChoosen) {
@@ -178,24 +178,6 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
 //        });
     }
 
-    public void readSaveGameFromDataBase() {
-        SQLiteDatabase database = openOrCreateDatabase("allSeasonsDB", MODE_PRIVATE, null);
-        Cursor cursor = database.rawQuery("SELECT allGamesFromSelectedSeasonJSON FROM savegameTable WHERE season LIKE " + SEASON + ";", null);
-
-        cursor.moveToFirst();
-
-        String testString = "";
-
-        if (cursor.moveToNext()) {
-            testString = cursor.getString(0);
-        } else {
-            testString = "leer";
-        }
-
-
-        cursor.close();
-//        database.close();
-    }
 
     public void saveGameIntoDatabase(boolean correctOrIncorrect, boolean increase) {
         SQLiteDatabase database = openOrCreateDatabase("allSeasonsDB", MODE_PRIVATE, null);
@@ -214,7 +196,7 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
         }
         cursor.close();
 
-        database.execSQL("UPDATE 'savegameTable' SET 'allGamesFromSelectedSeasonJSON' = '" + fromAllGamesFromSelectedSeasonToJsonString(allGamesFromSelectedSeason) + "', 'correct' = '" + correct + "', 'incorrect' = '" + incorrect + "', 'gamesToPlay' = '" + allGamesFromSelectedSeason.size() + "' WHERE season = " + SEASON + ";");
+        database.execSQL("UPDATE 'savegameTable' SET 'allGamesFromSelectedSeasonJSON' = '" + fromAllGamesFromSelectedSeasonToJsonString(listOfallGamesFromSelectedSeason) + "', 'correct' = '" + correct + "', 'incorrect' = '" + incorrect + "', 'gamesToPlay' = '" + listOfallGamesFromSelectedSeason.size() + "' WHERE season = " + SEASON + ";");
 //        database.close();
     }
 
