@@ -1,8 +1,6 @@
 package com.example.nflgame;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -14,7 +12,6 @@ import java.util.ArrayList;
 
 public class SeasonPickerActivity extends AppCompatActivity {
 
-    public DatabaseEnum databaseEnum;
     public DatabaseHelper dbHelper = new DatabaseHelper(this);
 
     public static final String EXTRA_SEASON = "com.example.nflgame.EXTRA_SEASON";
@@ -45,7 +42,7 @@ public class SeasonPickerActivity extends AppCompatActivity {
         mAdapter.setOnItemClickListener(new ExampleAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                if (!isPlayedThrough(seasonItemList.get(position).getmSeason())) {
+                if (!dbHelper.isPlayedThrough(seasonItemList.get(position).getmSeason())) {
                     goToGuessActivity(position);
                 } else {
                     Toast.makeText(SeasonPickerActivity.this, "Already played through.", Toast.LENGTH_SHORT).show();
@@ -61,31 +58,4 @@ public class SeasonPickerActivity extends AppCompatActivity {
         intent.putExtra(EXTRA_SEASON, item);
         startActivity(intent);
     }
-
-
-    public boolean isPlayedThrough(String season) {
-        String isPlayedThroughFromDatabase = "0";
-
-        String DB_NAME = "nfl_database";
-        String DB_TABLE_NAME = "saveGameTable";
-        String query = "SELECT 'playedThrough' FROM " + DB_TABLE_NAME + " WHERE 'season' LIKE " + season;
-
-        SQLiteDatabase database = openOrCreateDatabase(DB_NAME, MODE_PRIVATE, null);
-        Cursor cursor = database.rawQuery(query, null);
-        cursor.moveToFirst();
-
-        while (cursor.moveToNext()) {
-            isPlayedThroughFromDatabase = cursor.getString(0);
-        }
-
-        switch (isPlayedThroughFromDatabase) {
-            case "1":
-                return true;
-            case "0":
-                return false;
-            default:
-                return false;
-        }
-    }
-
 }

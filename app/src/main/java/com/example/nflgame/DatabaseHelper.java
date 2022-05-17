@@ -46,8 +46,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public boolean isPlayedThrough(String season) {
-        //TODO aus SeasonPickerActivity kopieren
-        return true;
+        // TODO implement isPlayedThrough somehow like
+        // 1. allGamesFromSelectedSeason Array is empty?
+        // 2. additional colum in savegameTable with isPlayedThrough = 0/1?
+        // 3. gamesToPlay == 0?
+        return false;
     }
 
 }
