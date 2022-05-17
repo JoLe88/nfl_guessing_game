@@ -27,13 +27,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
     }
+
+    // DatabaseHelper methods for Queries
 
     public ArrayList<SeasonItem> createSeasonList() {
         ArrayList<SeasonItem> seasonItemList = new ArrayList<>();
         db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + SAVEGAME_TABLE + " GROUP BY " + COLUMN_SEASON, null);
+        String query = "SELECT * FROM " + SAVEGAME_TABLE + " GROUP BY " + COLUMN_SEASON;
+        Cursor cursor = db.rawQuery(query, null);
         cursor.moveToFirst();
 
         do {
@@ -53,4 +55,48 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return false;
     }
 
+    public ArrayList<Datensatz> makeAllGamesFromSelectedSeasonIfNotInSaveGame(String season) {
+        ArrayList<Datensatz> allGamesFromSelectedSeason = new ArrayList<>();
+        int mapKey = 1;
+
+        db = getReadableDatabase();
+        String query = "SELECT * FROM " + ALL_DETAILS_TABLE + " WHERE season LIKE " + season;
+        Cursor cursor = db.rawQuery(query, null);
+        cursor.moveToFirst();
+
+        do {
+            Datensatz datensatz = new Datensatz();
+
+            datensatz.setGameId(cursor.getString(cursor.getColumnIndex("gameId")));
+            datensatz.setSeason(cursor.getString(cursor.getColumnIndex("season")));
+            datensatz.setGame_type(cursor.getString(cursor.getColumnIndex("game_type")));
+            datensatz.setWeek(cursor.getString(cursor.getColumnIndex("week")));
+            datensatz.setDate(cursor.getString(cursor.getColumnIndex("date")));
+            datensatz.setWritten_date(cursor.getString(cursor.getColumnIndex("written_date")));
+            datensatz.setWeekday(cursor.getString(cursor.getColumnIndex("weekday")));
+            datensatz.setAway_team(cursor.getString(cursor.getColumnIndex("away_team")));
+            datensatz.setAway_score(cursor.getString(cursor.getColumnIndex("away_score")));
+            datensatz.setHome_team(cursor.getString(cursor.getColumnIndex("home_team")));
+            datensatz.setHome_score(cursor.getString(cursor.getColumnIndex("home_score")));
+            datensatz.setResult(cursor.getString(cursor.getColumnIndex("result")));
+            datensatz.setTotal(cursor.getString(cursor.getColumnIndex("total")));
+            datensatz.setAway_win_loss_record(cursor.getString(cursor.getColumnIndex("away_win_loss_record")));
+            datensatz.setHome_win_loss_record(cursor.getString(cursor.getColumnIndex("home_win_loss_record")));
+            datensatz.setRoof(cursor.getString(cursor.getColumnIndex("roof")));
+            datensatz.setSurface(cursor.getString(cursor.getColumnIndex("surface")));
+            datensatz.setTemp(cursor.getString(cursor.getColumnIndex("temp")));
+            datensatz.setWind(cursor.getString(cursor.getColumnIndex("wind")));
+            datensatz.setWritten_weather(cursor.getString(cursor.getColumnIndex("written_weather")));
+            datensatz.setAway_coach(cursor.getString(cursor.getColumnIndex("away_coach")));
+            datensatz.setHome_coach(cursor.getString(cursor.getColumnIndex("home_coach")));
+            datensatz.setStadium(cursor.getString(cursor.getColumnIndex("stadium")));
+
+
+            allGamesFromSelectedSeason.add(datensatz);
+            mapKey++;
+        } while (cursor.moveToNext());
+
+        cursor.close();
+        return allGamesFromSelectedSeason;
+    }
 }

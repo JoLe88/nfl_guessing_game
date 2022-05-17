@@ -12,7 +12,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
@@ -21,12 +20,14 @@ import java.util.Random;
 
 public class GuessActivity extends AppCompatActivity implements View.OnClickListener {
 
+    public DatabaseHelper dbHelper = new DatabaseHelper(this);
+
     public static final String HOME_TEAM = "com.example.nflgame.EXTRA_SEASON";
     public static final String EXTRA_SEASON = "com.example.nflgame.EXTRA_SEASON";
 
 
     static String SEASON;
-    ArrayList<GameObject> allGamesFromSelectedSeason = new ArrayList<>();
+    ArrayList<Datensatz> allGamesFromSelectedSeason = new ArrayList<>();
     GameObject currentGame = new GameObject();
     int mapKey = 1;
 
@@ -59,11 +60,13 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
         imageViewBackToSeasonList.setOnClickListener(this);
         imageViewDrop.setOnClickListener(this);
 
+        allGamesFromSelectedSeason = dbHelper.makeAllGamesFromSelectedSeasonIfNotInSaveGame(SEASON);
+
 
         readSaveGameFromDataBase();
 
-        makeAllGamesFromSelectedSeasonIfNotInSaveGame();
-        setCurrentGame();
+//        makeAllGamesFromSelectedSeasonIfNotInSaveGame();
+//        setCurrentGame();
         setTextViews();
 
     }
@@ -77,11 +80,11 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
                 } else {
                     saveGameIntoDatabase(false, true);
                 }
-                try {
-                    fromJSONtoAllGamesFromSelectedSeason(fromAllGamesFromSelectedSeasonToJsonString(allGamesFromSelectedSeason));
-                } catch (JsonProcessingException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    fromJSONtoAllGamesFromSelectedSeason(fromAllGamesFromSelectedSeasonToJsonString(allGamesFromSelectedSeason));
+//                } catch (JsonProcessingException e) {
+//                    e.printStackTrace();
+//                }
                 buildNewLevel();
                 break;
 
@@ -91,11 +94,11 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
                 } else {
                     saveGameIntoDatabase(false, true);
                 }
-                try {
-                    fromJSONtoAllGamesFromSelectedSeason(fromAllGamesFromSelectedSeasonToJsonString(allGamesFromSelectedSeason));
-                } catch (JsonProcessingException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    fromJSONtoAllGamesFromSelectedSeason(fromAllGamesFromSelectedSeasonToJsonString(allGamesFromSelectedSeason));
+//                } catch (JsonProcessingException e) {
+//                    e.printStackTrace();
+//                }
                 buildNewLevel();
                 break;
 
@@ -120,41 +123,12 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
-    public void makeAllGamesFromSelectedSeasonIfNotInSaveGame() {
-        String DB_NAME = "allSeasonsDB";
-        String ALLSEASONS_TABLE = "allSeasonsTable";
-        String query = "SELECT * FROM " + ALLSEASONS_TABLE + " WHERE season LIKE " + SEASON;
-
-        SQLiteDatabase database = openOrCreateDatabase(DB_NAME, MODE_PRIVATE, null);
-        Cursor cursor = database.rawQuery(query, null);
-        cursor.moveToFirst();
-
-        while (cursor.moveToNext()) {
-            GameObject gameObject = new GameObject();
-
-            gameObject.setGame_type(cursor.getString(2));
-            gameObject.setWeek(cursor.getString(3));
-            gameObject.setGameday(cursor.getString(4));
-            gameObject.setWeekday(cursor.getString(5));
-            gameObject.setAway_team(cursor.getString(7));
-            gameObject.setAway_score(cursor.getString(8));
-            gameObject.setHome_team(cursor.getString(9));
-            gameObject.setHome_score(cursor.getString(10));
-
-            allGamesFromSelectedSeason.add(gameObject);
-            mapKey++;
-        }
-
-        cursor.close();
-//        database.close();
-    }
-
     public void setCurrentGame() {
         int i = createRandomNumber();
 
         currentGame.setGame_type(allGamesFromSelectedSeason.get(i).getGame_type());
         currentGame.setWeek(allGamesFromSelectedSeason.get(i).getWeek());
-        currentGame.setGameday(allGamesFromSelectedSeason.get(i).getGameday());
+//        currentGame.setGameday(allGamesFromSelectedSeason.get(i).getGameday());
         currentGame.setAway_team(allGamesFromSelectedSeason.get(i).getAway_team());
         currentGame.setAway_score(allGamesFromSelectedSeason.get(i).getAway_score());
         currentGame.setHome_team(allGamesFromSelectedSeason.get(i).getHome_team());
@@ -183,7 +157,7 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
     }
 
     public void buildNewLevel() {
-        setCurrentGame();
+//        setCurrentGame();
         setTextViews();
         Toast.makeText(this, "Noch " + allGamesFromSelectedSeason.size() + " Spiele in dieser Season.", Toast.LENGTH_SHORT).show();
     }
@@ -194,14 +168,14 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
 
     public String fromAllGamesFromSelectedSeasonToJsonString(ArrayList allGamesFromSelectedSeason) {
         Gson gson = new Gson();
-        
+
         return gson.toJson(allGamesFromSelectedSeason);
     }
 
     public void fromJSONtoAllGamesFromSelectedSeason(String json) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
-        allGamesFromSelectedSeason = mapper.readValue(json, new TypeReference<ArrayList<GameObject>>() {
-        });
+//        allGamesFromSelectedSeason = mapper.readValue(json, new TypeReference<ArrayList<GameObject>>() {
+//        });
     }
 
     public void readSaveGameFromDataBase() {
