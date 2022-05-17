@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "995602807272",
+    "project_id": "nfl-app-a4c5b",
+    "storage_bucket": "nfl-app-a4c5b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:995602807272:android:b0fdcb030118da732ecc5d",
+        "android_client_info": {
+          "package_name": "com.example.nflgame"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "995602807272-np51jk6t9c7vljahuhipbmge5nufonka.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANfYQ6wObcXrZZS_BQ-OaExTUF0bAV48s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "995602807272-np51jk6t9c7vljahuhipbmge5nufonka.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

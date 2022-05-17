@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/JerkovicJ/Documents/Lernunterlagen/AndroidStudioProjects/NFLGame2/app/src/main/res/layout/activity_database_creator.xml" value="0.3640625" />
+        <entry key="..\:/Users/JerkovicJ/Documents/Lernunterlagen/AndroidStudioProjects/NFLGame2/app/src/main/res/layout/activity_fullscreen.xml" value="0.290625" />
+        <entry key="..\:/Users/JerkovicJ/Documents/Lernunterlagen/AndroidStudioProjects/NFLGame2/app/src/main/res/layout/activity_guess.xml" value="0.33240740740740743" />
+        <entry key="..\:/Users/JerkovicJ/Documents/Lernunterlagen/AndroidStudioProjects/NFLGame2/app/src/main/res/layout/activity_main.xml" value="0.33240740740740743" />
+        <entry key="..\:/Users/JerkovicJ/Documents/Lernunterlagen/AndroidStudioProjects/NFLGame2/app/src/main/res/layout/activity_test.xml" value="0.446875" />
+        <entry key="..\:/Users/JerkovicJ/Documents/Lernunterlagen/AndroidStudioProjects/NFLGame2/app/src/main/res/layout/activity_test_for_firestore.xml" value="0.5541666666666667" />
+        <entry key="..\:/Users/JerkovicJ/Documents/Lernunterlagen/AndroidStudioProjects/NFLGame2/app/src/main/res/layout/activity_test_for_my_sqldatabase.xml" value="0.33" />
+        <entry key="..\:/Users/JerkovicJ/Documents/Lernunterlagen/AndroidStudioProjects/NFLGame2/app/src/main/res/layout/activity_test_for_my_sqlite_database.xml" value="0.5541666666666667" />
+        <entry key="..\:/Users/JerkovicJ/Documents/Lernunterlagen/AndroidStudioProjects/NFLGame2/app/src/main/res/layout/season_item_for_recyclerview.xml" value="0.33240740740740743" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
