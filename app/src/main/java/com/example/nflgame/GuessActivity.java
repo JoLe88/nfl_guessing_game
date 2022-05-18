@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
@@ -27,7 +28,7 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
 
 
     static String SEASON;
-    ArrayList<Datensatz> listOfallGamesFromSelectedSeason = new ArrayList<>();
+    ArrayList<Datensatz> listOfAllGamesFromSelectedSeason = new ArrayList<>();
     GameObject currentGame = new GameObject();
     int mapKey = 1;
 
@@ -60,10 +61,17 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
         imageViewBackToSeasonList.setOnClickListener(this);
         imageViewDrop.setOnClickListener(this);
 
-        listOfallGamesFromSelectedSeason = dbHelper.makeAllGamesFromSelectedSeasonIfNotInSaveGame(SEASON);
-
-
-        boolean isAllGamesFromSelectedSeasonJSONempty = dbHelper.isAllGamesFromSelectedSeasonJSONempty(SEASON);
+        // allGamesFromSelectedSeason for Savegame
+        if (dbHelper.isAllGamesFromSelectedSeasonJSONempty(SEASON)) {
+            listOfAllGamesFromSelectedSeason = dbHelper.makeAllGamesFromSelectedSeasonIfNotInSaveGame(SEASON);
+            dbHelper.writeListOfAllGamesFromSelectedSeasonToDatabase(fromListToJSONString(listOfAllGamesFromSelectedSeason), SEASON);
+        } else {
+            try {
+                listOfAllGamesFromSelectedSeason = fromJSONStringToList(dbHelper.loadListOfAllGamesFromSelectedSeasonFromDatabase(SEASON));
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        }
 
 //        makeAllGamesFromSelectedSeasonIfNotInSaveGame();
 //        setCurrentGame();
@@ -75,66 +83,32 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.textViewAwayTeam:
-                if (ceckIfCorrectOrIncorrect(currentGame.getAway_score(), currentGame.getHome_score())) {
-                    saveGameIntoDatabase(true, true);
-                } else {
-                    saveGameIntoDatabase(false, true);
-                }
-//                try {
-//                    fromJSONtoAllGamesFromSelectedSeason(fromAllGamesFromSelectedSeasonToJsonString(allGamesFromSelectedSeason));
-//                } catch (JsonProcessingException e) {
-//                    e.printStackTrace();
-//                }
-                buildNewLevel();
                 break;
 
             case R.id.textViewHomeTeam:
-                if (ceckIfCorrectOrIncorrect(currentGame.getHome_score(), currentGame.getAway_score())) {
-                    saveGameIntoDatabase(true, true);
-                } else {
-                    saveGameIntoDatabase(false, true);
-                }
-//                try {
-//                    fromJSONtoAllGamesFromSelectedSeason(fromAllGamesFromSelectedSeasonToJsonString(allGamesFromSelectedSeason));
-//                } catch (JsonProcessingException e) {
-//                    e.printStackTrace();
-//                }
-                buildNewLevel();
                 break;
 
             case R.id.imageViewBackToSeasonList:
-                saveGameIntoDatabase(true, false);
-                try {
-                    fromJSONtoAllGamesFromSelectedSeason(fromAllGamesFromSelectedSeasonToJsonString(listOfallGamesFromSelectedSeason));
-                } catch (JsonProcessingException e) {
-                    e.printStackTrace();
-                }
-                Intent intent = new Intent(this, SeasonPickerActivity.class);
-                startActivity(intent);
                 break;
 
             case R.id.imageViewDrop:
-//                dropTableSaveGame();
                 break;
         }
     }
 
-    public void getAllGamesFromSelectedSeasonFromSaveGame() {
-
-    }
 
     public void setCurrentGame() {
         int i = createRandomNumber();
 
-        currentGame.setGame_type(listOfallGamesFromSelectedSeason.get(i).getGame_type());
-        currentGame.setWeek(listOfallGamesFromSelectedSeason.get(i).getWeek());
+        currentGame.setGame_type(listOfAllGamesFromSelectedSeason.get(i).getGame_type());
+        currentGame.setWeek(listOfAllGamesFromSelectedSeason.get(i).getWeek());
 //        currentGame.setGameday(allGamesFromSelectedSeason.get(i).getGameday());
-        currentGame.setAway_team(listOfallGamesFromSelectedSeason.get(i).getAway_team());
-        currentGame.setAway_score(listOfallGamesFromSelectedSeason.get(i).getAway_score());
-        currentGame.setHome_team(listOfallGamesFromSelectedSeason.get(i).getHome_team());
-        currentGame.setHome_score(listOfallGamesFromSelectedSeason.get(i).getHome_score());
+        currentGame.setAway_team(listOfAllGamesFromSelectedSeason.get(i).getAway_team());
+        currentGame.setAway_score(listOfAllGamesFromSelectedSeason.get(i).getAway_score());
+        currentGame.setHome_team(listOfAllGamesFromSelectedSeason.get(i).getHome_team());
+        currentGame.setHome_score(listOfAllGamesFromSelectedSeason.get(i).getHome_score());
 
-        listOfallGamesFromSelectedSeason.remove(i);
+        listOfAllGamesFromSelectedSeason.remove(i);
     }
 
     public void setTextViews() {
@@ -152,30 +126,29 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
     public int createRandomNumber() {
         Random r = new Random();
         int low = 1;
-        int high = listOfallGamesFromSelectedSeason.size();
+        int high = listOfAllGamesFromSelectedSeason.size();
         return r.nextInt(high - low) + low;
     }
 
     public void buildNewLevel() {
 //        setCurrentGame();
         setTextViews();
-        Toast.makeText(this, "Noch " + listOfallGamesFromSelectedSeason.size() + " Spiele in dieser Season.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Noch " + listOfAllGamesFromSelectedSeason.size() + " Spiele in dieser Season.", Toast.LENGTH_SHORT).show();
     }
 
     public boolean ceckIfCorrectOrIncorrect(String choosen, String notChoosen) {
         return Integer.parseInt(choosen) > Integer.parseInt(notChoosen);
     }
 
-    public String fromAllGamesFromSelectedSeasonToJsonString(ArrayList allGamesFromSelectedSeason) {
+    public String fromListToJSONString(ArrayList listOfAllGamesFromSelectedSeason) {
         Gson gson = new Gson();
-
-        return gson.toJson(allGamesFromSelectedSeason);
+        return gson.toJson(listOfAllGamesFromSelectedSeason);
     }
 
-    public void fromJSONtoAllGamesFromSelectedSeason(String json) throws JsonProcessingException {
+    public ArrayList fromJSONStringToList(String json) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
-//        allGamesFromSelectedSeason = mapper.readValue(json, new TypeReference<ArrayList<GameObject>>() {
-//        });
+        return mapper.readValue(json, new TypeReference<ArrayList<Datensatz>>() {
+        });
     }
 
 
@@ -196,7 +169,7 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
         }
         cursor.close();
 
-        database.execSQL("UPDATE 'savegameTable' SET 'allGamesFromSelectedSeasonJSON' = '" + fromAllGamesFromSelectedSeasonToJsonString(listOfallGamesFromSelectedSeason) + "', 'correct' = '" + correct + "', 'incorrect' = '" + incorrect + "', 'gamesToPlay' = '" + listOfallGamesFromSelectedSeason.size() + "' WHERE season = " + SEASON + ";");
+        database.execSQL("UPDATE 'savegameTable' SET 'allGamesFromSelectedSeasonJSON' = '" + fromListToJSONString(listOfAllGamesFromSelectedSeason) + "', 'correct' = '" + correct + "', 'incorrect' = '" + incorrect + "', 'gamesToPlay' = '" + listOfAllGamesFromSelectedSeason.size() + "' WHERE season = " + SEASON + ";");
 //        database.close();
     }
 

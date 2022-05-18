@@ -1,5 +1,6 @@
 package com.example.nflgame;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -116,5 +117,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cursor.close();
             return false;
         }
+    }
+
+
+    public void testInsert(String season) {
+        db = getReadableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("allGamesFromSelectedSeasonJSON", season);
+        String where = "season=?";
+        String[] whereArgs = new String[]{String.valueOf(season)};
+        db.update(SAVEGAME_TABLE, cv, where, whereArgs);
+    }
+
+    public void writeListOfAllGamesFromSelectedSeasonToDatabase(String listOfAllGamesFromSelectedSeason, String season) {
+        db = getReadableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("allGamesFromSelectedSeasonJSON", listOfAllGamesFromSelectedSeason);
+        String where = "season=?";
+        String[] whereArgs = new String[]{String.valueOf(season)};
+        db.update(SAVEGAME_TABLE, cv, where, whereArgs);
+    }
+
+
+    public String loadListOfAllGamesFromSelectedSeasonFromDatabase(String season) {
+        db = getReadableDatabase();
+        String query = "SELECT allGamesFromSelectedSeasonJSON FROM " + SAVEGAME_TABLE + " WHERE season LIKE " + season;
+        Cursor cursor = db.rawQuery(query, null);
+        cursor.moveToFirst();
+        
+        return cursor.getString(cursor.getColumnIndex("allGamesFromSelectedSeasonJSON"));
     }
 }
