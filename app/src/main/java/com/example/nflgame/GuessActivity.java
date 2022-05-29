@@ -23,19 +23,15 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
 
     public DatabaseHelper dbHelper = new DatabaseHelper(this);
 
-    public static final String HOME_TEAM = "com.example.nflgame.EXTRA_SEASON";
-    public static final String EXTRA_SEASON = "com.example.nflgame.EXTRA_SEASON";
-
-
     static String SEASON;
     ArrayList<Datensatz> listOfAllGamesFromSelectedSeason = new ArrayList<>();
-    GameObject currentGame = new GameObject();
-    int mapKey = 1;
+    Datensatz currentGame = new Datensatz();
+    int randomGameId;
 
 
     // Views
-    TextView textViewGameType, textViewWeek, textViewGameday, textViewAwayTeam, textViewAwayScore, textViewHomeTeam, textViewHomeScore;
-    ImageView imageViewBackToSeasonList, imageViewDrop;
+    TextView textViewSeason, textViewGameType, textViewWeek, textViewWeekday, textViewAwayTeam, textViewAwayScore, textViewHomeTeam, textViewHomeScore;
+    ImageView imageViewBackToSeasonList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,21 +41,20 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
         Intent intent = getIntent();
         SEASON = intent.getStringExtra(SeasonPickerActivity.EXTRA_SEASON);
 
+        textViewSeason = findViewById(R.id.textViewSeason);
         textViewGameType = findViewById(R.id.textViewGameType);
         textViewWeek = findViewById(R.id.textViewWeek);
-        textViewGameday = findViewById(R.id.textViewGameday);
+        textViewWeekday = findViewById(R.id.textViewWeekday);
         textViewAwayTeam = findViewById(R.id.textViewAwayTeam);
         textViewAwayScore = findViewById(R.id.textViewAwayScore);
         textViewAwayTeam = findViewById(R.id.textViewAwayTeam);
         textViewHomeTeam = findViewById(R.id.textViewHomeTeam);
         textViewHomeScore = findViewById(R.id.textViewHomeScore);
         imageViewBackToSeasonList = findViewById(R.id.imageViewBackToSeasonList);
-        imageViewDrop = findViewById(R.id.imageViewDrop);
 
         textViewAwayTeam.setOnClickListener(this);
         textViewHomeTeam.setOnClickListener(this);
         imageViewBackToSeasonList.setOnClickListener(this);
-        imageViewDrop.setOnClickListener(this);
 
         // allGamesFromSelectedSeason for Savegame
         if (dbHelper.isAllGamesFromSelectedSeasonJSONempty(SEASON)) {
@@ -73,49 +68,42 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
             }
         }
 
-//        makeAllGamesFromSelectedSeasonIfNotInSaveGame();
-//        setCurrentGame();
-//        setTextViews();
+        setCurrentGame();
 
+
+    }
+
+    private void setCurrentGame() {
+        randomGameId = createRandomGameId(listOfAllGamesFromSelectedSeason.size());
+        currentGame = listOfAllGamesFromSelectedSeason.get(randomGameId);
+        setTextViews();
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.textViewAwayTeam:
+                listOfAllGamesFromSelectedSeason.remove(randomGameId);
+                setCurrentGame();
                 break;
 
             case R.id.textViewHomeTeam:
+                listOfAllGamesFromSelectedSeason.remove(randomGameId);
+                setCurrentGame();
                 break;
 
             case R.id.imageViewBackToSeasonList:
-                break;
-
-            case R.id.imageViewDrop:
                 break;
         }
     }
 
 
-    public void setCurrentGame() {
-        int i = createRandomNumber();
-
-        currentGame.setGame_type(listOfAllGamesFromSelectedSeason.get(i).getGame_type());
-        currentGame.setWeek(listOfAllGamesFromSelectedSeason.get(i).getWeek());
-//        currentGame.setGameday(allGamesFromSelectedSeason.get(i).getGameday());
-        currentGame.setAway_team(listOfAllGamesFromSelectedSeason.get(i).getAway_team());
-        currentGame.setAway_score(listOfAllGamesFromSelectedSeason.get(i).getAway_score());
-        currentGame.setHome_team(listOfAllGamesFromSelectedSeason.get(i).getHome_team());
-        currentGame.setHome_score(listOfAllGamesFromSelectedSeason.get(i).getHome_score());
-
-        listOfAllGamesFromSelectedSeason.remove(i);
-    }
-
     public void setTextViews() {
 
+        textViewSeason.setText(currentGame.getSeason());
         textViewGameType.setText(currentGame.getGame_type());
         textViewWeek.setText(currentGame.getWeek());
-        textViewGameday.setText(currentGame.getGameday());
+        textViewWeekday.setText(currentGame.getWeekday());
         textViewAwayTeam.setText(currentGame.getAway_team());
         textViewAwayScore.setText(currentGame.getAway_score());
         textViewHomeTeam.setText(currentGame.getHome_team());
@@ -123,11 +111,12 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
-    public int createRandomNumber() {
+    public int createRandomGameId(int size) {
         Random r = new Random();
-        int low = 1;
-        int high = listOfAllGamesFromSelectedSeason.size();
-        return r.nextInt(high - low) + low;
+//        int low = 0;
+//        int high = size;
+//        return r.nextInt(size - low) + low;
+        return r.nextInt(size) + 1;
     }
 
     public void buildNewLevel() {

@@ -51,72 +51,43 @@
     <!--  ================ START TEAM TILES ======================  -->
 
     <!--  1. TILE = AWAY TEAM ======================  -->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraitLayoutAwayTeam"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <TextView
-            android:id="@+id/textViewAwayTeam"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="textViewAwayTeam"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textViewAwayScore"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="textViewAwayScore"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/textViewHomeTeam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="textViewHomeTeam"
+        android:textSize="14sp"
+        tools:layout_editor_absoluteX="267dp"
+        tools:layout_editor_absoluteY="382dp" />
 
-    <!--  2. TILE = HOME TEAM ======================  -->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraitLayoutHomeTeam"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        app:layout_constraintBottom_toTopOf="@id/constraitLayoutAwayTeam">
+    <TextView
+        android:id="@+id/textViewHomeScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="textViewHomeScore"
+        android:textSize="20sp"
+        tools:layout_editor_absoluteX="212dp"
+        tools:layout_editor_absoluteY="332dp" />
 
-        <TextView
-            android:id="@+id/textViewHomeTeam"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="textViewHomeTeam"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/textViewAwayTeam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="textViewAwayTeam"
+        android:textSize="14sp"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="382dp" />
 
-        <TextView
-            android:id="@+id/textViewHomeScore"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="textViewHomeScore"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.502" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!--  ================ END TEAM TILES ======================  -->
-
+    <TextView
+        android:id="@+id/textViewAwayScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="textViewAwayScore"
+        android:textSize="20sp"
+        tools:layout_editor_absoluteX="15dp"
+        tools:layout_editor_absoluteY="332dp" />
 
     <ImageView
         android:id="@+id/imageViewBackToSeasonList"
@@ -126,13 +97,5 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_media_previous" />
 
-    <ImageView
-        android:id="@+id/imageViewDrop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/btn_dialog" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

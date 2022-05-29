@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 //        dropTableSaveGame();
-        creatSavegameTable();
+//        creatSavegameTable();
 
         Intent intent = new Intent(this, SeasonPickerActivity.class);
         startActivity(intent);
