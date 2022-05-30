@@ -119,10 +119,10 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
 
     public void setTextViews() {
 
-        textViewSeason.setText(currentGame.getSeason());
+        textViewSeason.setText("Season " + currentGame.getSeason());
         textViewGameType.setText(currentGame.getGame_type());
-        textViewWeek.setText(currentGame.getWeek());
-        textViewWeekday.setText(currentGame.getWeekday());
+        textViewWeek.setText("Week " + currentGame.getWeek());
+        textViewWeekday.setText(currentGame.getWritten_date());
         textViewAwayTeam.setText(currentGame.getAway_team());
         textViewAwayScore.setText(currentGame.getAway_score());
         textViewHomeTeam.setText(currentGame.getHome_team());
