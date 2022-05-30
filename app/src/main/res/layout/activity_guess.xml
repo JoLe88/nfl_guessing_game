@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background_blue"
     tools:context=".GuessActivity">
 
     <TextView
@@ -41,29 +42,17 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewGameType" />
 
     <TextView
-        android:id="@+id/textViewGameday"
+        android:id="@+id/textViewWeekday"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="textViewGameday"
         app:layout_constraintTop_toBottomOf="@+id/textViewWeek" />
 
-    <!--  ================ START TEAM TILES ======================  -->
-
-    <!--  1. TILE = AWAY TEAM ======================  -->
-
-
-    <TextView
-        android:id="@+id/textViewHomeTeam"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="textViewHomeTeam"
-        android:textSize="14sp"
-        tools:layout_editor_absoluteX="267dp"
-        tools:layout_editor_absoluteY="382dp" />
 
     <TextView
         android:id="@+id/textViewHomeScore"
+        android:visibility="invisible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="textViewHomeScore"
@@ -71,17 +60,10 @@
         tools:layout_editor_absoluteX="212dp"
         tools:layout_editor_absoluteY="332dp" />
 
-    <TextView
-        android:id="@+id/textViewAwayTeam"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="textViewAwayTeam"
-        android:textSize="14sp"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="382dp" />
 
     <TextView
         android:id="@+id/textViewAwayScore"
+        android:visibility="invisible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="textViewAwayScore"
@@ -96,6 +78,67 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_media_previous" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginBottom="24dp"
+        android:src="@drawable/sklip_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        app:layout_constraintBottom_toTopOf="@+id/imageView2">
+
+
+        <ImageView
+            android:id="@+id/imageViewCardRight"
+            android:layout_width="200dp"
+            android:layout_height="250dp"
+            android:src="@drawable/card_background2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/imageViewCardLeft"
+            tools:layout_editor_absoluteY="0dp" />
+
+
+        <ImageView
+            android:id="@+id/imageViewCardLeft"
+            android:layout_width="200dp"
+            android:layout_height="250dp"
+            android:src="@drawable/card_background2"
+            app:layout_constraintEnd_toStartOf="@+id/imageViewCardRight"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/textViewAwayTeam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:text="textViewHomeTeam"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageViewCardLeft"
+            app:layout_constraintEnd_toStartOf="@+id/imageViewCardRight"
+            app:layout_constraintStart_toStartOf="@+id/imageViewCardLeft" />
+
+        <TextView
+            android:id="@+id/textViewHomeTeam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:text="textViewHomeTeam"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageViewCardRight"
+            app:layout_constraintEnd_toEndOf="@+id/imageViewCardRight"
+            app:layout_constraintStart_toStartOf="@+id/imageViewCardRight" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
