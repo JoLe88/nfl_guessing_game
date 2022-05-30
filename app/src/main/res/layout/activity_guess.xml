@@ -49,6 +49,14 @@
         android:text="textViewGameday"
         app:layout_constraintTop_toBottomOf="@+id/textViewWeek" />
 
+    <TextView
+        android:id="@+id/textViewQuestionCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="0 / 0"
+        app:layout_constraintTop_toBottomOf="@+id/textViewWeekday" />
+
 
     <TextView
         android:id="@+id/textViewHomeScore"
