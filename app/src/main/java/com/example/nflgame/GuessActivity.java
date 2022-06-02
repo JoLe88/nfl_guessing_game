@@ -33,7 +33,7 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
 
     // Views
     TextView textViewSeason, textViewGameType, textViewWeek, textViewWeekday, textViewAwayTeam, textViewAwayScore, textViewHomeTeam, textViewHomeScore, textViewQuestionCount;
-    ImageView imageViewBackToSeasonList, imageViewCardAway, imageViewCardHome, imageViewSkipButton;
+    ImageView imageViewBackToSeasonList, imageViewCardAway, imageViewCardHome, imageViewSkipButton, imageViewDrawButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,9 +58,12 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
         imageViewCardHome = findViewById(R.id.imageViewCardHome);
         textViewQuestionCount = findViewById(R.id.textViewQuestionCount);
         imageViewSkipButton = findViewById(R.id.imageViewSkipButton);
+        imageViewDrawButton = findViewById(R.id.imageViewDrawButton);
 
         imageViewCardAway.setOnClickListener(this);
         imageViewCardHome.setOnClickListener(this);
+        imageViewDrawButton.setOnClickListener(this);
+
         imageViewBackToSeasonList.setOnClickListener(this);
         imageViewSkipButton.setOnClickListener(this);
 
@@ -88,6 +91,17 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
                 break;
 
             case R.id.imageViewCardHome:
+                listOfAllGamesFromSelectedSeason.remove(randomGameId);
+                dbHelper.updateGamesToPlayCounter(SEASON, dbHelper.getGamesToPlayCounter(SEASON) + 1);
+                if (dbHelper.isPlayedThrough(SEASON)) {
+                    Log.d("Played through: ", "TRUE");
+                    finish();
+                } else {
+                    setCurrentGame();
+                }
+                break;
+
+            case R.id.imageViewDrawButton:
                 listOfAllGamesFromSelectedSeason.remove(randomGameId);
                 dbHelper.updateGamesToPlayCounter(SEASON, dbHelper.getGamesToPlayCounter(SEASON) + 1);
                 if (dbHelper.isPlayedThrough(SEASON)) {
