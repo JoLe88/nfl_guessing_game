@@ -39,9 +39,11 @@
             android:id="@+id/textViewSeason"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="24dp"
             android:text="SEASON XXXX"
+            android:textColor="@color/white"
+            android:textSize="20dp"
             app:layout_constraintEnd_toEndOf="@+id/seasonDetailsWindow"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/textViewQuestionCount"
@@ -53,6 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="100dp"
             android:text="GameType"
+            android:textSize="30dp"
             app:layout_constraintEnd_toEndOf="@+id/seasonDetailsWindow"
             app:layout_constraintStart_toStartOf="@+id/seasonDetailsWindow"
             app:layout_constraintTop_toTopOf="@+id/seasonDetailsWindow" />
@@ -63,6 +66,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="Week"
+            android:textSize="24dp"
             app:layout_constraintEnd_toEndOf="@+id/seasonDetailsWindow"
             app:layout_constraintStart_toStartOf="@+id/seasonDetailsWindow"
             app:layout_constraintTop_toBottomOf="@+id/textViewGameType" />
@@ -81,9 +85,10 @@
             android:id="@+id/textViewQuestionCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="32dp"
             android:text="0 / 0"
+            android:textSize="20dp"
             app:layout_constraintEnd_toStartOf="@+id/textViewSeason"
             app:layout_constraintHorizontal_bias="0.34"
             app:layout_constraintStart_toStartOf="@+id/seasonDetailsWindow"
@@ -124,7 +129,7 @@
 
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/imageViewSkipButton"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_marginBottom="24dp"
@@ -137,50 +142,52 @@
         android:id="@+id/constraintLayout2"
         android:layout_width="match_parent"
         android:layout_height="260dp"
-        app:layout_constraintBottom_toTopOf="@+id/imageView2">
+        app:layout_constraintBottom_toTopOf="@+id/imageViewSkipButton">
 
 
         <ImageView
-            android:id="@+id/imageViewCardRight"
+            android:id="@+id/imageViewCardHome"
             android:layout_width="200dp"
             android:layout_height="250dp"
             android:src="@drawable/card_background2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/imageViewCardLeft"
+            app:layout_constraintStart_toEndOf="@+id/imageViewCardAway"
             tools:layout_editor_absoluteY="0dp" />
 
 
         <ImageView
-            android:id="@+id/imageViewCardLeft"
+            android:id="@+id/imageViewCardAway"
             android:layout_width="200dp"
             android:layout_height="250dp"
             android:src="@drawable/card_background2"
-            app:layout_constraintEnd_toStartOf="@+id/imageViewCardRight"
+            app:layout_constraintEnd_toStartOf="@+id/imageViewCardHome"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/textViewAwayTeam"
+            android:visibility="invisible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dp"
             android:text="textViewHomeTeam"
             android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="@+id/imageViewCardLeft"
-            app:layout_constraintEnd_toStartOf="@+id/imageViewCardRight"
-            app:layout_constraintStart_toStartOf="@+id/imageViewCardLeft" />
+            app:layout_constraintBottom_toBottomOf="@+id/imageViewCardAway"
+            app:layout_constraintEnd_toStartOf="@+id/imageViewCardHome"
+            app:layout_constraintStart_toStartOf="@+id/imageViewCardAway" />
 
         <TextView
             android:id="@+id/textViewHomeTeam"
+            android:visibility="invisible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dp"
             android:text="textViewHomeTeam"
             android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="@+id/imageViewCardRight"
-            app:layout_constraintEnd_toEndOf="@+id/imageViewCardRight"
-            app:layout_constraintStart_toStartOf="@+id/imageViewCardRight" />
+            app:layout_constraintBottom_toBottomOf="@+id/imageViewCardHome"
+            app:layout_constraintEnd_toEndOf="@+id/imageViewCardHome"
+            app:layout_constraintStart_toStartOf="@+id/imageViewCardHome" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

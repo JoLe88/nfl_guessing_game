@@ -19,23 +19,29 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        dropTableSaveGame();
-//        creatSavegameTable();
+        dropTableSaveGame();
+        creatSavegameTable();
 
         Intent intent = new Intent(this, SeasonPickerActivity.class);
         startActivity(intent);
     }
 
+
     public void creatSavegameTable() {
+        // create savegameTable
         SQLiteDatabase database = openOrCreateDatabase("nfl_database", MODE_PRIVATE, null);
         database.execSQL("CREATE TABLE IF NOT EXISTS 'savegameTable' ('season' INTEGER PRIMARY KEY, 'allGamesFromSelectedSeasonJSON' TEXT, 'correct' INTEGER, 'incorrect' INTEGER, 'gamesToPlayTotal' TEXT, 'gamesToPlayCounter' TEXT)");
+
+        //insert testSeason
+        database.execSQL("INSERT INTO 'savegameTable' ('season', 'correct', 'incorrect', 'gamesToPlayTotal', 'gamesToPlayCounter') VALUES ('1969', '0', '0', '10', '1');");
 
         Cursor cursor = database.rawQuery("SELECT season FROM 'allDetails' GROUP BY season", null);
         cursor.moveToFirst();
 
-        while (cursor.moveToNext()) {
+        do {
             database.execSQL("INSERT INTO 'savegameTable' ('season', 'correct', 'incorrect', 'gamesToPlayTotal', 'gamesToPlayCounter') VALUES ('" + (cursor.getString(0)) + "', '0', '0', '0', '0');");
-        }
+        } while (cursor.moveToNext());
+
         cursor.close();
 
         // fill gamesToPlayTotal and gamesToPlayCounter

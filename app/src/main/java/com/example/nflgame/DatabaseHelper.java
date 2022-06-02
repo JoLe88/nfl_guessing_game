@@ -50,10 +50,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public boolean isPlayedThrough(String season) {
-        // TODO implement isPlayedThrough somehow like
-        // 1. allGamesFromSelectedSeason Array is empty?
-        // 2. additional colum in savegameTable with isPlayedThrough = 0/1?
-        // 3. gamesToPlay == 0?
+        if (getGamesToPlayCounter(season) > getGamesToPlayTotal(season)) {
+            return true;
+        }
         return false;
     }
 
@@ -138,13 +137,49 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.update(SAVEGAME_TABLE, cv, where, whereArgs);
     }
 
-
     public String loadListOfAllGamesFromSelectedSeasonFromDatabase(String season) {
         db = getReadableDatabase();
         String query = "SELECT allGamesFromSelectedSeasonJSON FROM " + SAVEGAME_TABLE + " WHERE season LIKE " + season;
         Cursor cursor = db.rawQuery(query, null);
         cursor.moveToFirst();
-        
+
         return cursor.getString(cursor.getColumnIndex("allGamesFromSelectedSeasonJSON"));
     }
+
+    public int getGamesToPlayTotal(String season) {
+        db = getReadableDatabase();
+        String query = "SELECT * FROM " + SAVEGAME_TABLE + " WHERE season LIKE " + season;
+        Cursor cursor = db.rawQuery(query, null);
+        cursor.moveToFirst();
+
+        return Integer.valueOf(cursor.getString(cursor.getColumnIndex("gamesToPlayTotal")));
+    }
+
+    public void updateGamesToPlayTotal(String season, String gamesToPlayTotal) {
+        db = getReadableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("gamesToPlayTotal", gamesToPlayTotal);
+        String where = "season=?";
+        String[] whereArgs = new String[]{String.valueOf(season)};
+        db.update(SAVEGAME_TABLE, cv, where, whereArgs);
+    }
+
+    public int getGamesToPlayCounter(String season) {
+        db = getReadableDatabase();
+        String query = "SELECT * FROM " + SAVEGAME_TABLE + " WHERE season LIKE " + season;
+        Cursor cursor = db.rawQuery(query, null);
+        cursor.moveToFirst();
+
+        return Integer.valueOf(cursor.getString(cursor.getColumnIndex("gamesToPlayCounter")));
+    }
+
+    public void updateGamesToPlayCounter(String season, int gamesToPlayCounter) {
+        db = getReadableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("gamesToPlayCounter", gamesToPlayCounter);
+        String where = "season=?";
+        String[] whereArgs = new String[]{String.valueOf(season)};
+        db.update(SAVEGAME_TABLE, cv, where, whereArgs);
+    }
+
 }

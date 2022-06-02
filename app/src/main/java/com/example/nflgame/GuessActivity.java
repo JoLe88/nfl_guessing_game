@@ -1,9 +1,10 @@
 package com.example.nflgame;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Random;
 
 public class GuessActivity extends AppCompatActivity implements View.OnClickListener {
@@ -26,12 +28,12 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
     ArrayList<Datensatz> listOfAllGamesFromSelectedSeason = new ArrayList<>();
     Datensatz currentGame = new Datensatz();
     int randomGameId;
-    int questionCounter = 0, questionTotal;
+    int gamesToPlayCounter, gamesToPlayTotal;
 
 
     // Views
     TextView textViewSeason, textViewGameType, textViewWeek, textViewWeekday, textViewAwayTeam, textViewAwayScore, textViewHomeTeam, textViewHomeScore, textViewQuestionCount;
-    ImageView imageViewBackToSeasonList;
+    ImageView imageViewBackToSeasonList, imageViewCardAway, imageViewCardHome, imageViewSkipButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,7 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
 
         Intent intent = getIntent();
         SEASON = intent.getStringExtra(SeasonPickerActivity.EXTRA_SEASON);
+
 
         textViewSeason = findViewById(R.id.textViewSeason);
         textViewGameType = findViewById(R.id.textViewGameType);
@@ -51,21 +54,58 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
         textViewHomeTeam = findViewById(R.id.textViewHomeTeam);
         textViewHomeScore = findViewById(R.id.textViewHomeScore);
         imageViewBackToSeasonList = findViewById(R.id.imageViewBackToSeasonList);
+        imageViewCardAway = findViewById(R.id.imageViewCardAway);
+        imageViewCardHome = findViewById(R.id.imageViewCardHome);
         textViewQuestionCount = findViewById(R.id.textViewQuestionCount);
+        imageViewSkipButton = findViewById(R.id.imageViewSkipButton);
 
-        textViewAwayTeam.setOnClickListener(this);
-        textViewHomeTeam.setOnClickListener(this);
+        imageViewCardAway.setOnClickListener(this);
+        imageViewCardHome.setOnClickListener(this);
         imageViewBackToSeasonList.setOnClickListener(this);
+        imageViewSkipButton.setOnClickListener(this);
 
         // allGamesFromSelectedSeason for savegame
         getOrCreateListOfAllGamesFromSelectedSeason();
-
-        questionTotal = listOfAllGamesFromSelectedSeason.size();
 
         // get a random game from the list of all games from selected Season and set TextViews
         setCurrentGame();
 
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.imageViewCardAway:
+                listOfAllGamesFromSelectedSeason.remove(randomGameId);
+                dbHelper.updateGamesToPlayCounter(SEASON, dbHelper.getGamesToPlayCounter(SEASON) + 1);
+                if (dbHelper.isPlayedThrough(SEASON)) {
+                    Log.d("Played through: ", "TRUE");
+                    finish();
+                } else {
+                    setCurrentGame();
+                }
+                break;
+
+            case R.id.imageViewCardHome:
+                listOfAllGamesFromSelectedSeason.remove(randomGameId);
+                dbHelper.updateGamesToPlayCounter(SEASON, dbHelper.getGamesToPlayCounter(SEASON) + 1);
+                if (dbHelper.isPlayedThrough(SEASON)) {
+                    Log.d("Played through: ", "TRUE");
+                    finish();
+                } else {
+                    setCurrentGame();
+                }
+                break;
+
+            case R.id.imageViewBackToSeasonList:
+                finish();
+                break;
+
+            case R.id.imageViewSkipButton:
+                setCurrentGame();
+                break;
+        }
     }
 
     private void getOrCreateListOfAllGamesFromSelectedSeason() {
@@ -97,39 +137,39 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
         setTextViews();
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.textViewAwayTeam:
-                listOfAllGamesFromSelectedSeason.remove(randomGameId);
-                setCurrentGame();
-                break;
-
-            case R.id.textViewHomeTeam:
-                listOfAllGamesFromSelectedSeason.remove(randomGameId);
-                setCurrentGame();
-                break;
-
-            case R.id.imageViewBackToSeasonList:
-                finish();
-                break;
-        }
-    }
-
-
     public void setTextViews() {
 
         textViewSeason.setText("Season " + currentGame.getSeason());
         textViewGameType.setText(currentGame.getGame_type());
         textViewWeek.setText("Week " + currentGame.getWeek());
         textViewWeekday.setText(currentGame.getWritten_date());
-        textViewAwayTeam.setText(currentGame.getAway_team());
+        textViewAwayTeam.setText(getShortTeamName(currentGame.getAway_team()));
         textViewAwayScore.setText(currentGame.getAway_score());
-        textViewHomeTeam.setText(currentGame.getHome_team());
+        textViewHomeTeam.setText(getShortTeamName(currentGame.getHome_team()));
         textViewHomeScore.setText(currentGame.getHome_score());
 
-        questionCounter++;
-        textViewQuestionCount.setText(questionCounter + "/" + questionTotal);
+        textViewQuestionCount.setText(dbHelper.getGamesToPlayCounter(SEASON) + "/" + dbHelper.getGamesToPlayTotal(SEASON));
+
+        imageViewCardAway.setImageDrawable(getCardName(currentGame.getAway_team()));
+        imageViewCardHome.setImageDrawable(getCardName(currentGame.getHome_team()));
+
+
+    }
+
+    public Drawable getCardName(String teamName) {
+        if (!teamName.equals("Washington Football Team") && !teamName.equals("San Francisco 49ers")) {
+            String[] parts = teamName.split(" ");
+            teamName = parts[parts.length - 1].toLowerCase(Locale.ROOT);
+        } else if (teamName.equals("Washington Football Team")) {
+            teamName = "washington";
+        } else if (teamName.equals("San Francisco 49ers")) {
+            teamName = "sf49ers";
+        }
+        Log.d("TEAM NAME", teamName);
+
+        Resources res = getResources();
+        int resID = res.getIdentifier(teamName + "_card", "drawable", getPackageName());
+        return res.getDrawable(resID);
     }
 
     public int createRandomGameId(int size) {
@@ -157,31 +197,14 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-    public void saveGameIntoDatabase(boolean correctOrIncorrect, boolean increase) {
-        SQLiteDatabase database = openOrCreateDatabase("allSeasonsDB", MODE_PRIVATE, null);
-        Cursor cursor = database.rawQuery("SELECT * FROM savegameTable WHERE season LIKE " + SEASON + ";", null);
-        cursor.moveToFirst();
-
-        int correct = Integer.parseInt(cursor.getString(2));
-        int incorrect = Integer.parseInt(cursor.getString(3));
-
-        if (increase) {
-            if (correctOrIncorrect) {
-                incorrect++;
-            } else {
-                correct++;
-            }
+    public String getShortTeamName(String fullTeamName) {
+        if (fullTeamName.equals("Washington Football Team")) {
+            return "Washington";
         }
-        cursor.close();
-
-        database.execSQL("UPDATE 'savegameTable' SET 'allGamesFromSelectedSeasonJSON' = '" + fromListToJSONString(listOfAllGamesFromSelectedSeason) + "', 'correct' = '" + correct + "', 'incorrect' = '" + incorrect + "', 'gamesToPlay' = '" + listOfAllGamesFromSelectedSeason.size() + "' WHERE season = " + SEASON + ";");
-//        database.close();
+        String[] parts = fullTeamName.split(" ");
+        String shortTeamName = parts[parts.length - 1];
+        return shortTeamName;
     }
 
-    public void dropTableSaveGame() {
-        SQLiteDatabase database = openOrCreateDatabase("allSeasonsDB", MODE_PRIVATE, null);
-        database.execSQL("DELETE FROM 'savegameTable'");
-//        database.close();
-    }
 
 }

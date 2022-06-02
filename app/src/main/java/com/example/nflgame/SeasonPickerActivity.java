@@ -2,6 +2,7 @@ package com.example.nflgame;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,8 +44,10 @@ public class SeasonPickerActivity extends AppCompatActivity {
             @Override
             public void onItemClick(int position) {
                 if (!dbHelper.isPlayedThrough(seasonItemList.get(position).getmSeason())) {
+                    Log.d("Played through: ", "FALSE");
                     goToGuessActivity(position);
                 } else {
+                    Log.d("Played through: ", "TRUE");
                     Toast.makeText(SeasonPickerActivity.this, "Already played through.", Toast.LENGTH_SHORT).show();
                 }
             }
