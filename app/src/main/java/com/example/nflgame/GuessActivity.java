@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -112,6 +111,7 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
                 break;
 
             case R.id.imageViewBackToSeasonList:
+                finish();
                 break;
         }
     }
@@ -140,11 +140,6 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
         return r.nextInt(size);
     }
 
-    public void buildNewLevel() {
-//        setCurrentGame();
-        setTextViews();
-        Toast.makeText(this, "Noch " + listOfAllGamesFromSelectedSeason.size() + " Spiele in dieser Season.", Toast.LENGTH_SHORT).show();
-    }
 
     public boolean ceckIfCorrectOrIncorrect(String choosen, String notChoosen) {
         return Integer.parseInt(choosen) > Integer.parseInt(notChoosen);
