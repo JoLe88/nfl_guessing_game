@@ -34,8 +34,8 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExempleV
             super(itemView);
             mSuperBowlLogoImageView = itemView.findViewById(R.id.superBowlLogoImageView);
             mSeasonTextView = itemView.findViewById(R.id.seasonTextView);
-            mIncorrectTextView = itemView.findViewById(R.id.correctTextView);
-            mCorrectTextView = itemView.findViewById(R.id.incorrectTextView);
+            mIncorrectTextView = itemView.findViewById(R.id.incorrectTextView);
+            mCorrectTextView = itemView.findViewById(R.id.correctTextView);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

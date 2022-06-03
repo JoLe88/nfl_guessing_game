@@ -41,7 +41,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.moveToFirst();
 
         do {
-            seasonItemList.add(new SeasonItem(R.drawable.ic_circle, cursor.getString(0), cursor.getString(2), cursor.getString(3)));
+            seasonItemList.add(new SeasonItem(R.drawable.ic_circle, cursor.getString(cursor.getColumnIndex("season")), cursor.getString(cursor.getColumnIndex("correct")), cursor.getString(cursor.getColumnIndex("incorrect"))));
         } while (cursor.moveToNext());
 
         cursor.close();
@@ -182,4 +182,50 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.update(SAVEGAME_TABLE, cv, where, whereArgs);
     }
 
+    public void updateCorrectOrIncorrect(String season, boolean correct) {
+        db = getReadableDatabase();
+        ContentValues cv = new ContentValues();
+
+        if (correct) {
+            String query = "SELECT * FROM " + SAVEGAME_TABLE + " WHERE season LIKE " + season;
+            Cursor cursor = db.rawQuery(query, null);
+            cursor.moveToFirst();
+            int correctAnswers = cursor.getInt(cursor.getColumnIndex("correct"));
+
+            cv.put("correct", correctAnswers + 1);
+            String where = "season=?";
+            String[] whereArgs = new String[]{String.valueOf(season)};
+            db.update(SAVEGAME_TABLE, cv, where, whereArgs);
+        } else {
+            String query = "SELECT * FROM " + SAVEGAME_TABLE + " WHERE season LIKE " + season;
+            Cursor cursor = db.rawQuery(query, null);
+            cursor.moveToFirst();
+            int incorrectAnswers = cursor.getInt(cursor.getColumnIndex("incorrect"));
+
+            cv.put("incorrect", incorrectAnswers + 1);
+            String where = "season=?";
+            String[] whereArgs = new String[]{String.valueOf(season)};
+            db.update(SAVEGAME_TABLE, cv, where, whereArgs);
+        }
+
+
+    }
+
+    public int getIncorrect(String season) {
+        db = getReadableDatabase();
+        String query = "SELECT * FROM " + SAVEGAME_TABLE + " WHERE season LIKE " + season;
+        Cursor cursor = db.rawQuery(query, null);
+        cursor.moveToFirst();
+
+        return Integer.valueOf(cursor.getString(cursor.getColumnIndex("incorrect")));
+    }
+
+    public int getCorrect(String season) {
+        db = getReadableDatabase();
+        String query = "SELECT * FROM " + SAVEGAME_TABLE + " WHERE season LIKE " + season;
+        Cursor cursor = db.rawQuery(query, null);
+        cursor.moveToFirst();
+
+        return Integer.valueOf(cursor.getString(cursor.getColumnIndex("ccorrect")));
+    }
 }

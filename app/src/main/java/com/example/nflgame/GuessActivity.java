@@ -80,8 +80,13 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.imageViewCardAway:
+                // remove the played game from the list of games to play
                 listOfAllGamesFromSelectedSeason.remove(randomGameId);
+                // update games to play counter
                 dbHelper.updateGamesToPlayCounter(SEASON, dbHelper.getGamesToPlayCounter(SEASON) + 1);
+                // check if answer ist correct
+                dbHelper.updateCorrectOrIncorrect(SEASON, ceckIfCorrectOrIncorrect(currentGame.getAway_score(), currentGame.getHome_score()));
+                //check if season is played through
                 if (dbHelper.isPlayedThrough(SEASON)) {
                     Log.d("Played through: ", "TRUE");
                     finish();
@@ -91,8 +96,13 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
                 break;
 
             case R.id.imageViewCardHome:
+                // remove the played game from the list of games to play
                 listOfAllGamesFromSelectedSeason.remove(randomGameId);
+                // update games to play counter
                 dbHelper.updateGamesToPlayCounter(SEASON, dbHelper.getGamesToPlayCounter(SEASON) + 1);
+                // check if answer ist correct
+                dbHelper.updateCorrectOrIncorrect(SEASON, ceckIfCorrectOrIncorrect(currentGame.getHome_score(), currentGame.getAway_score()));
+                //check if season is played through
                 if (dbHelper.isPlayedThrough(SEASON)) {
                     Log.d("Played through: ", "TRUE");
                     finish();
@@ -102,8 +112,17 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
                 break;
 
             case R.id.imageViewDrawButton:
+                // remove the played game from the list of games to play
                 listOfAllGamesFromSelectedSeason.remove(randomGameId);
+                // update games to play counter
                 dbHelper.updateGamesToPlayCounter(SEASON, dbHelper.getGamesToPlayCounter(SEASON) + 1);
+                // check if answer ist correct
+                if (currentGame.getAway_score() == currentGame.getHome_score()) {
+                    dbHelper.updateCorrectOrIncorrect(SEASON, true);
+                } else {
+                    dbHelper.updateCorrectOrIncorrect(SEASON, false);
+                }
+                //check if season is played through
                 if (dbHelper.isPlayedThrough(SEASON)) {
                     Log.d("Played through: ", "TRUE");
                     finish();
@@ -113,7 +132,7 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
                 break;
 
             case R.id.imageViewBackToSeasonList:
-                finish();
+                backToSeasonPickerActivity();
                 break;
 
             case R.id.imageViewSkipButton:
@@ -194,7 +213,6 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
         return r.nextInt(size);
     }
 
-
     public boolean ceckIfCorrectOrIncorrect(String choosen, String notChoosen) {
         return Integer.parseInt(choosen) > Integer.parseInt(notChoosen);
     }
@@ -210,7 +228,6 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
         });
     }
 
-
     public String getShortTeamName(String fullTeamName) {
         if (fullTeamName.equals("Washington Football Team")) {
             return "Washington";
@@ -218,6 +235,11 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
         String[] parts = fullTeamName.split(" ");
         String shortTeamName = parts[parts.length - 1];
         return shortTeamName;
+    }
+
+    public void backToSeasonPickerActivity() {
+        Intent intent = new Intent(this, SeasonPickerActivity.class);
+        startActivity(intent);
     }
 
 
