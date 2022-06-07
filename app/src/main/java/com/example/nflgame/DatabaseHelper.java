@@ -230,7 +230,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void updateScore(String season, long timeLeftInMillis) {
-        long correctIncorrectRatio = getCorrect(season) / getIncorrect(season);
+        long correctIncorrectRatio = 0;
+        if (getIncorrect(season) != 0) {
+            correctIncorrectRatio = getCorrect(season) / getIncorrect(season);
+        }
         long score = timeLeftInMillis * correctIncorrectRatio;
         db = getReadableDatabase();
         ContentValues cv = new ContentValues();
