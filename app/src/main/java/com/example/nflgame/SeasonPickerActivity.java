@@ -3,6 +3,7 @@ package com.example.nflgame;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,10 +24,16 @@ public class SeasonPickerActivity extends AppCompatActivity {
     private ExampleAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
+    TextView textViewTotalScore;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_season_picker);
+
+        textViewTotalScore = findViewById(R.id.textViewTotalScore);
+
+        textViewTotalScore.setText("Total Score: " + dbHelper.getTotalScore());
 
         // create the Season List
         seasonItemList = dbHelper.createSeasonList();
