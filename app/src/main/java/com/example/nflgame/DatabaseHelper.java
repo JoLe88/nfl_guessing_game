@@ -14,6 +14,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String ALL_DETAILS_TABLE = "allDetails";
     private static final String SAVEGAME_TABLE = "savegameTable";
     private static final String COLUMN_SEASON = "season";
+    private static final String COLUMN_SCORE = "score";
 
 
     private SQLiteDatabase db;
@@ -45,7 +46,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         } while (cursor.moveToNext());
 
         cursor.close();
-        db.close();
         return seasonItemList;
     }
 
@@ -226,6 +226,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query, null);
         cursor.moveToFirst();
 
-        return Integer.valueOf(cursor.getString(cursor.getColumnIndex("ccorrect")));
+        return Integer.valueOf(cursor.getString(cursor.getColumnIndex("correct")));
+    }
+
+    public void updateScore(String season, long timeLeftInMillis) {
+        long correctIncorrectRatio = getCorrect(season) / getIncorrect(season);
+        long score = timeLeftInMillis * correctIncorrectRatio;
+        db = getReadableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("score", score);
+        String where = "season=?";
+        String[] whereArgs = new String[]{String.valueOf(season)};
+        db.update(SAVEGAME_TABLE, cv, where, whereArgs);
+    }
+
+    public String getTotalScore() {
+        db = getReadableDatabase();
+        String query = "SELECT SUM(score) FROM " + SAVEGAME_TABLE;
+        Cursor cursor = db.rawQuery(query, null);
+        cursor.moveToFirst();
+
+        return cursor.getString(0);
     }
 }

@@ -2,8 +2,10 @@ package com.example.nflgame;
 
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -25,14 +27,16 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
     public DatabaseHelper dbHelper = new DatabaseHelper(this);
 
     static String SEASON;
+    static final long COUNTDOWN_IN_MILLISEC = 11000;
     ArrayList<Datensatz> listOfAllGamesFromSelectedSeason = new ArrayList<>();
     Datensatz currentGame = new Datensatz();
     int randomGameId;
     int gamesToPlayCounter, gamesToPlayTotal;
-
+    private CountDownTimer countDownTimer;
+    private long timeLeftInMillis;
 
     // Views
-    TextView textViewSeason, textViewGameType, textViewWeek, textViewWeekday, textViewAwayTeam, textViewAwayScore, textViewHomeTeam, textViewHomeScore, textViewQuestionCount;
+    TextView textViewSeason, textViewGameType, textViewWeek, textViewWeekday, textViewAwayTeam, textViewAwayScore, textViewHomeTeam, textViewHomeScore, textViewQuestionCount, textViewCountdown;
     ImageView imageViewBackToSeasonList, imageViewCardAway, imageViewCardHome, imageViewSkipButton, imageViewDrawButton;
 
     @Override
@@ -44,6 +48,7 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
         SEASON = intent.getStringExtra(SeasonPickerActivity.EXTRA_SEASON);
 
 
+        textViewCountdown = findViewById(R.id.textViewCountdown);
         textViewSeason = findViewById(R.id.textViewSeason);
         textViewGameType = findViewById(R.id.textViewGameType);
         textViewWeek = findViewById(R.id.textViewWeek);
@@ -80,6 +85,9 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.imageViewCardAway:
+                dbHelper.updateScore(SEASON, timeLeftInMillis);
+                // cancel countdowntimer
+                countDownTimer.cancel();
                 // remove the played game from the list of games to play
                 listOfAllGamesFromSelectedSeason.remove(randomGameId);
                 // update games to play counter
@@ -96,6 +104,9 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
                 break;
 
             case R.id.imageViewCardHome:
+                dbHelper.updateScore(SEASON, timeLeftInMillis);
+                // cancel countdowntimer
+                countDownTimer.cancel();
                 // remove the played game from the list of games to play
                 listOfAllGamesFromSelectedSeason.remove(randomGameId);
                 // update games to play counter
@@ -112,6 +123,9 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
                 break;
 
             case R.id.imageViewDrawButton:
+                dbHelper.updateScore(SEASON, timeLeftInMillis);
+                // cancel countdowntimer
+                countDownTimer.cancel();
                 // remove the played game from the list of games to play
                 listOfAllGamesFromSelectedSeason.remove(randomGameId);
                 // update games to play counter
@@ -132,13 +146,20 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
                 break;
 
             case R.id.imageViewBackToSeasonList:
+                dbHelper.updateScore(SEASON, timeLeftInMillis);
+                // cancel countdowntimer
+                countDownTimer.cancel();
                 backToSeasonPickerActivity();
                 break;
 
             case R.id.imageViewSkipButton:
+                dbHelper.updateScore(SEASON, timeLeftInMillis);
+                // cancel countdowntimer
+                countDownTimer.cancel();
                 setCurrentGame();
                 break;
         }
+        Log.d("Score", dbHelper.getTotalScore());
     }
 
     private void getOrCreateListOfAllGamesFromSelectedSeason() {
@@ -186,7 +207,38 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
         imageViewCardAway.setImageDrawable(getCardName(currentGame.getAway_team()));
         imageViewCardHome.setImageDrawable(getCardName(currentGame.getHome_team()));
 
+        timeLeftInMillis = COUNTDOWN_IN_MILLISEC;
+        startCountdown();
+    }
 
+    private void startCountdown() {
+        countDownTimer = new CountDownTimer(timeLeftInMillis, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                timeLeftInMillis = millisUntilFinished;
+                updateCountdownText();
+            }
+
+            @Override
+            public void onFinish() {
+                timeLeftInMillis = 0;
+                updateCountdownText();
+            }
+        }.start();
+    }
+
+    private void updateCountdownText() {
+        int minutes = (int) (timeLeftInMillis / 1000) / 60;
+        int seconds = (int) (timeLeftInMillis / 1000) % 60;
+
+        String timeFormatted = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
+        textViewCountdown.setText(timeFormatted);
+
+        if (timeLeftInMillis < 5000) {
+            textViewCountdown.setTextColor(Color.RED);
+        } else {
+            textViewCountdown.setTextColor(Color.BLACK);
+        }
     }
 
     public Drawable getCardName(String teamName) {

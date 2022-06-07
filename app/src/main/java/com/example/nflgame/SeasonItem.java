@@ -6,7 +6,7 @@ public class SeasonItem {
     private String mIncorrect;
     private String mCorrect;
 
-    public SeasonItem(int imageResource, String season, String incorrect, String correct) {
+    public SeasonItem(int imageResource, String season, String correct, String incorrect) {
         mImageResource = imageResource;
         mSeason = season;
         mIncorrect = incorrect;
