@@ -36,7 +36,7 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
     private long timeLeftInMillis;
 
     // Views
-    TextView textViewSeason, textViewGameType, textViewWeek, textViewWeekday, textViewAwayTeam, textViewAwayScore, textViewHomeTeam, textViewHomeScore, textViewQuestionCount, textViewCountdown;
+    TextView textViewSeason, textViewGameType, textViewWeek, textViewWeekday, textViewAwayTeam, textViewAwayScore, textViewHomeTeam, textViewHomeScore, textViewQuestionCount, textViewCountdown, textViewCorrect, textViewIncorrect;
     ImageView imageViewBackToSeasonList, imageViewCardAway, imageViewCardHome, imageViewSkipButton, imageViewDrawButton;
 
     @Override
@@ -64,6 +64,8 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
         textViewQuestionCount = findViewById(R.id.textViewQuestionCount);
         imageViewSkipButton = findViewById(R.id.imageViewSkipButton);
         imageViewDrawButton = findViewById(R.id.imageViewDrawButton);
+        textViewCorrect = findViewById(R.id.textViewCorrect);
+        textViewIncorrect = findViewById(R.id.textViewIncorrect);
 
         imageViewCardAway.setOnClickListener(this);
         imageViewCardHome.setOnClickListener(this);
@@ -201,6 +203,9 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
         textViewAwayScore.setText(currentGame.getAway_score());
         textViewHomeTeam.setText(getShortTeamName(currentGame.getHome_team()));
         textViewHomeScore.setText(currentGame.getHome_score());
+
+        textViewCorrect.setText(String.valueOf(dbHelper.getCorrect(SEASON)));
+        textViewIncorrect.setText(String.valueOf(dbHelper.getIncorrect(SEASON)));
 
         textViewQuestionCount.setText(dbHelper.getGamesToPlayCounter(SEASON) + "/" + dbHelper.getGamesToPlayTotal(SEASON));
 
