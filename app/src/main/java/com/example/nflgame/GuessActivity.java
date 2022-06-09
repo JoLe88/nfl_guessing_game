@@ -37,7 +37,7 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
 
     // Views
     TextView textViewSeason, textViewGameType, textViewWeek, textViewWeekday, textViewAwayTeam, textViewAwayScore, textViewHomeTeam, textViewHomeScore, textViewQuestionCount, textViewCountdown, textViewCorrect, textViewIncorrect;
-    ImageView imageViewBackToSeasonList, imageViewCardAway, imageViewCardHome, imageViewSkipButton, imageViewDrawButton;
+    ImageView imageViewBackToSeasonList, imageViewCardAway, imageViewCardHome, imageViewSkipButton, imageViewDrawButton, imageViewOverlayCorrect, imageViewOverlayIncorrect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,10 +66,14 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
         imageViewDrawButton = findViewById(R.id.imageViewDrawButton);
         textViewCorrect = findViewById(R.id.textViewCorrect);
         textViewIncorrect = findViewById(R.id.textViewIncorrect);
+        imageViewOverlayCorrect = findViewById(R.id.imageViewOverlayCorrect);
+        imageViewOverlayIncorrect = findViewById(R.id.imageViewOverlayIncorrect);
 
         imageViewCardAway.setOnClickListener(this);
         imageViewCardHome.setOnClickListener(this);
         imageViewDrawButton.setOnClickListener(this);
+        imageViewOverlayCorrect.setOnClickListener(this);
+        imageViewOverlayIncorrect.setOnClickListener(this);
 
         imageViewBackToSeasonList.setOnClickListener(this);
         imageViewSkipButton.setOnClickListener(this);
@@ -95,14 +99,19 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
                 // update games to play counter
                 dbHelper.updateGamesToPlayCounter(SEASON, dbHelper.getGamesToPlayCounter(SEASON) + 1);
                 // check if answer ist correct
-                dbHelper.updateCorrectOrIncorrect(SEASON, ceckIfCorrectOrIncorrect(currentGame.getAway_score(), currentGame.getHome_score()));
-                //check if season is played through
-                if (dbHelper.isPlayedThrough(SEASON)) {
-                    Log.d("Played through: ", "TRUE");
-                    finish();
+                dbHelper.updateCorrectOrIncorrect(SEASON, checkIfCorrectOrIncorrect(currentGame.getAway_score(), currentGame.getHome_score()));
+                if (checkIfCorrectOrIncorrect(currentGame.getAway_score(), currentGame.getHome_score())) {
+                    imageViewOverlayCorrect.setVisibility(View.VISIBLE);
                 } else {
-                    setCurrentGame();
+                    imageViewOverlayIncorrect.setVisibility(View.VISIBLE);
                 }
+//                //check if season is played through
+//                if (dbHelper.isPlayedThrough(SEASON)) {
+//                    Log.d("Played through: ", "TRUE");
+//                    finish();
+//                } else {
+//                    setCurrentGame();
+//                }
                 break;
 
             case R.id.imageViewCardHome:
@@ -114,14 +123,19 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
                 // update games to play counter
                 dbHelper.updateGamesToPlayCounter(SEASON, dbHelper.getGamesToPlayCounter(SEASON) + 1);
                 // check if answer ist correct
-                dbHelper.updateCorrectOrIncorrect(SEASON, ceckIfCorrectOrIncorrect(currentGame.getHome_score(), currentGame.getAway_score()));
-                //check if season is played through
-                if (dbHelper.isPlayedThrough(SEASON)) {
-                    Log.d("Played through: ", "TRUE");
-                    finish();
+                dbHelper.updateCorrectOrIncorrect(SEASON, checkIfCorrectOrIncorrect(currentGame.getHome_score(), currentGame.getAway_score()));
+                if (checkIfCorrectOrIncorrect(currentGame.getHome_score(), currentGame.getAway_score())) {
+                    imageViewOverlayCorrect.setVisibility(View.VISIBLE);
                 } else {
-                    setCurrentGame();
+                    imageViewOverlayIncorrect.setVisibility(View.VISIBLE);
                 }
+//                //check if season is played through
+//                if (dbHelper.isPlayedThrough(SEASON)) {
+//                    Log.d("Played through: ", "TRUE");
+//                    finish();
+//                } else {
+//                    setCurrentGame();
+//                }
                 break;
 
             case R.id.imageViewDrawButton:
@@ -135,16 +149,18 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
                 // check if answer ist correct
                 if (currentGame.getAway_score() == currentGame.getHome_score()) {
                     dbHelper.updateCorrectOrIncorrect(SEASON, true);
+                    imageViewOverlayCorrect.setVisibility(View.VISIBLE);
                 } else {
                     dbHelper.updateCorrectOrIncorrect(SEASON, false);
+                    imageViewOverlayIncorrect.setVisibility(View.VISIBLE);
                 }
-                //check if season is played through
-                if (dbHelper.isPlayedThrough(SEASON)) {
-                    Log.d("Played through: ", "TRUE");
-                    finish();
-                } else {
-                    setCurrentGame();
-                }
+//                //check if season is played through
+//                if (dbHelper.isPlayedThrough(SEASON)) {
+//                    Log.d("Played through: ", "TRUE");
+//                    finish();
+//                } else {
+//                    setCurrentGame();
+//                }
                 break;
 
             case R.id.imageViewBackToSeasonList:
@@ -160,8 +176,23 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
                 countDownTimer.cancel();
                 setCurrentGame();
                 break;
+
+            case R.id.imageViewOverlayCorrect:
+            case R.id.imageViewOverlayIncorrect:
+                //check if season is played through
+                if (dbHelper.isPlayedThrough(SEASON)) {
+                    Log.d("Played through: ", "TRUE");
+                    finish();
+                } else {
+                    setCurrentGame();
+                    imageViewOverlayCorrect.setVisibility(View.GONE);
+                    imageViewOverlayIncorrect.setVisibility(View.GONE);
+                }
+                break;
+
         }
         Log.d("Score", dbHelper.getTotalScore());
+
     }
 
     private void getOrCreateListOfAllGamesFromSelectedSeason() {
@@ -270,7 +301,7 @@ public class GuessActivity extends AppCompatActivity implements View.OnClickList
         return r.nextInt(size);
     }
 
-    public boolean ceckIfCorrectOrIncorrect(String choosen, String notChoosen) {
+    public boolean checkIfCorrectOrIncorrect(String choosen, String notChoosen) {
         return Integer.parseInt(choosen) > Integer.parseInt(notChoosen);
     }
 
