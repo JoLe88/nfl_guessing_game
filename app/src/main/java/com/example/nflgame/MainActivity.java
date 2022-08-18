@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void dropTableSaveGame() {
         SQLiteDatabase database = openOrCreateDatabase("nfl_database", MODE_PRIVATE, null);
-        database.execSQL("DROP TABLE 'savegameTable'");
+        database.execSQL("DROP TABLE IF EXISTS 'savegameTable'");
 //        database.close();
     }
 

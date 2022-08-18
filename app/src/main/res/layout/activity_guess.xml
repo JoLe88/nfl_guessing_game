@@ -28,7 +28,7 @@
         <ImageView
             android:id="@+id/imageViewSeasonScore"
             android:layout_width="200dp"
-            android:layout_height="50dp"
+            android:layout_height="60dp"
             android:layout_marginTop="8dp"
             android:src="@drawable/season_score"
             app:layout_constraintEnd_toEndOf="parent"
@@ -67,20 +67,16 @@
             android:id="@+id/seasonDetailsWindow"
             android:layout_width="match_parent"
             android:layout_height="270dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="16dp"
-            android:src="@drawable/season_details_window"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageViewSeasonScore" />
+            android:layout_marginTop="16dp"
+            android:src="@drawable/season_details_window2"
+            app:layout_constraintTop_toBottomOf="@+id/imageViewSeasonScore"
+            tools:layout_editor_absoluteX="16dp" />
 
         <TextView
             android:id="@+id/textViewSeason"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="26dp"
             android:layout_marginEnd="24dp"
             android:fontFamily="@font/fort_quinsy"
             android:text="SEASON XXXX"
@@ -100,7 +96,6 @@
             android:text="GameType"
             android:textSize="40dp"
             app:layout_constraintEnd_toEndOf="@+id/seasonDetailsWindow"
-            app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="@+id/seasonDetailsWindow"
             app:layout_constraintTop_toBottomOf="@+id/textViewWeek" />
 
@@ -113,7 +108,6 @@
             android:text="Week"
             android:textSize="30dp"
             app:layout_constraintEnd_toEndOf="@+id/seasonDetailsWindow"
-            app:layout_constraintHorizontal_bias="0.492"
             app:layout_constraintStart_toStartOf="@+id/seasonDetailsWindow"
             app:layout_constraintTop_toTopOf="@+id/seasonDetailsWindow" />
 
@@ -133,7 +127,7 @@
             android:id="@+id/textViewQuestionCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="26dp"
             android:layout_marginEnd="32dp"
             android:fontFamily="@font/fort_quinsy"
             android:text="0 / 0"
@@ -145,9 +139,10 @@
 
         <ImageView
             android:id="@+id/imageView"
+            android:visibility="gone"
             android:layout_width="120dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="200dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="220dp"
             android:src="@drawable/timer_background2"
             app:layout_constraintEnd_toEndOf="@+id/seasonDetailsWindow"
             app:layout_constraintStart_toStartOf="@+id/seasonDetailsWindow"
@@ -164,6 +159,7 @@
             app:layout_constraintEnd_toEndOf="@+id/imageView"
             app:layout_constraintStart_toStartOf="@+id/imageView"
             app:layout_constraintTop_toTopOf="@+id/imageView" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -211,7 +207,7 @@
             android:id="@+id/imageViewCardHome"
             android:layout_width="200dp"
             android:layout_height="250dp"
-            android:src="@drawable/card_background2"
+            android:src="@drawable/card_background"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/imageViewCardAway"
@@ -222,7 +218,7 @@
             android:id="@+id/imageViewCardAway"
             android:layout_width="200dp"
             android:layout_height="250dp"
-            android:src="@drawable/card_background2"
+            android:src="@drawable/card_background"
             app:layout_constraintEnd_toStartOf="@+id/imageViewCardHome"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent" />
