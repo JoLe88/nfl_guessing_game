@@ -38,6 +38,7 @@ public class SeasonPickerActivity extends AppCompatActivity {
         // create the Season List
         seasonItemList = dbHelper.createSeasonList();
 
+        // generate RecyclerView of Season Items
         mRecyclerView = findViewById(R.id.recyclerViewId);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
@@ -52,7 +53,8 @@ public class SeasonPickerActivity extends AppCompatActivity {
             public void onItemClick(int position) {
                 if (!dbHelper.isPlayedThrough(seasonItemList.get(position).getmSeason())) {
                     Log.d("Played through: ", "FALSE");
-                    goToGuessActivity(position);
+//                    goToGuessActivity(position);
+                    goToWeekMapActivity(position);
                 } else {
                     Log.d("Played through: ", "TRUE");
                     Toast.makeText(SeasonPickerActivity.this, "Already played through.", Toast.LENGTH_SHORT).show();
@@ -66,6 +68,13 @@ public class SeasonPickerActivity extends AppCompatActivity {
         String item = seasonItemList.get(position).getmSeason();
         Intent intent = new Intent(this, GuessActivity.class);
         intent.putExtra(EXTRA_SEASON, item);
+        startActivity(intent);
+    }
+
+    public void goToWeekMapActivity(int position) {
+//        String item = seasonItemList.get(position).getmSeason();
+        Intent intent = new Intent(this, WeekMapActivity.class);
+//        intent.putExtra(EXTRA_SEASON, item);
         startActivity(intent);
     }
 }
