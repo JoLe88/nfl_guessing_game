@@ -21,7 +21,7 @@ public class SeasonPickerActivity extends AppCompatActivity {
     ArrayList<SeasonItem> seasonItemList = new ArrayList<>();
 
     private RecyclerView mRecyclerView;
-    private ExampleAdapter mAdapter;
+    private ExampleAdapterSeason mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
     TextView textViewTotalScore;
@@ -42,13 +42,13 @@ public class SeasonPickerActivity extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.recyclerViewId);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
-        mAdapter = new ExampleAdapter(seasonItemList);
+        mAdapter = new ExampleAdapterSeason(seasonItemList);
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
         // onClick for the Season List
-        mAdapter.setOnItemClickListener(new ExampleAdapter.OnItemClickListener() {
+        mAdapter.setOnItemClickListener(new ExampleAdapterSeason.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 if (!dbHelper.isPlayedThrough(seasonItemList.get(position).getmSeason())) {

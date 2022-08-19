@@ -6,12 +6,12 @@
     tools:context=".WeekMapActivity">
 
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        tools:layout_editor_absoluteX="174dp"
-        tools:layout_editor_absoluteY="337dp" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewWeek"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="5dp"
+        android:background="@android:color/darker_gray" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

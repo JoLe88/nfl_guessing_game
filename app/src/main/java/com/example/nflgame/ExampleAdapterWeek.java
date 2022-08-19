@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExempleViewHolder> {
-    private ArrayList<SeasonItem> mSeasonList;
+public class ExampleAdapterWeek extends RecyclerView.Adapter<ExampleAdapterWeek.ExempleViewHolder> {
+    private ArrayList<WeekItem> mWeekList;
 
     private OnItemClickListener mListener;
 
@@ -25,17 +25,15 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExempleV
     }
 
     public static class ExempleViewHolder extends RecyclerView.ViewHolder {
-        public ImageView mSuperBowlLogoImageView;
-        public TextView mSeasonTextView;
-        public TextView mIncorrectTextView;
-        public TextView mCorrectTextView;
+        public ImageView mStarsImageView;
+        public TextView mWeekTextView;
+//        public TextView mStarsTextView;
 
         public ExempleViewHolder(View itemView, OnItemClickListener listener) {
             super(itemView);
-            mSuperBowlLogoImageView = itemView.findViewById(R.id.superBowlLogoImageView);
-            mSeasonTextView = itemView.findViewById(R.id.seasonTextView);
-            mIncorrectTextView = itemView.findViewById(R.id.incorrectTextView);
-            mCorrectTextView = itemView.findViewById(R.id.correctTextView);
+            mStarsImageView = itemView.findViewById(R.id.starsImageView);
+            mWeekTextView = itemView.findViewById(R.id.weekTextView);
+//            mStarsTextView = itemView.findViewById(R.id.starsTextView);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -52,29 +50,28 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExempleV
 
     }
 
-    public ExampleAdapter(ArrayList<SeasonItem> seasonItems) {
-        mSeasonList = seasonItems;
+    public ExampleAdapterWeek(ArrayList<WeekItem> weekItems) {
+        mWeekList = weekItems;
     }
 
     @Override
     public ExempleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.season_item_for_recyclerview, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.week_item_for_recyclerview, parent, false);
         ExempleViewHolder evh = new ExempleViewHolder(v, mListener);
         return evh;
     }
 
     @Override
-    public void onBindViewHolder(ExampleAdapter.ExempleViewHolder holder, int position) {
-        SeasonItem currentItem = mSeasonList.get(position);
+    public void onBindViewHolder(ExampleAdapterWeek.ExempleViewHolder holder, int position) {
+        WeekItem currentItem = mWeekList.get(position);
 
-        holder.mSuperBowlLogoImageView.setImageResource(currentItem.getmImageResource());
-        holder.mSeasonTextView.setText(currentItem.getmSeason());
-        holder.mIncorrectTextView.setText(currentItem.getmIncorrect());
-        holder.mCorrectTextView.setText(currentItem.getmCorrect());
+        holder.mStarsImageView.setImageResource(currentItem.getmImageResource());
+        holder.mWeekTextView.setText(String.valueOf(currentItem.getmWeek()));
+//        holder.mStarsTextView.setText(String.valueOf(currentItem.getmStars()));
     }
 
     @Override
     public int getItemCount() {
-        return mSeasonList.size();
+        return mWeekList.size();
     }
 }

@@ -49,6 +49,40 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return seasonItemList;
     }
 
+    public ArrayList<WeekItem> createWeekList() {
+        ArrayList<WeekItem> weekItemList = new ArrayList<>();
+
+        weekItemList.add(new WeekItem(R.drawable.stars_test, 12, 3));
+        weekItemList.add(new WeekItem(R.drawable.stars_test, 13, 3));
+        weekItemList.add(new WeekItem(R.drawable.stars_test, 14, 3));
+        weekItemList.add(new WeekItem(R.drawable.stars_test, 15, 3));
+        weekItemList.add(new WeekItem(R.drawable.stars_test, 12, 3));
+        weekItemList.add(new WeekItem(R.drawable.stars_test, 13, 3));
+        weekItemList.add(new WeekItem(R.drawable.stars_test, 14, 3));
+        weekItemList.add(new WeekItem(R.drawable.stars_test, 15, 3));
+        weekItemList.add(new WeekItem(R.drawable.stars_test, 12, 3));
+        weekItemList.add(new WeekItem(R.drawable.stars_test, 13, 3));
+        weekItemList.add(new WeekItem(R.drawable.stars_test, 14, 3));
+        weekItemList.add(new WeekItem(R.drawable.stars_test, 15, 3));
+        weekItemList.add(new WeekItem(R.drawable.stars_test, 12, 3));
+        weekItemList.add(new WeekItem(R.drawable.stars_test, 13, 3));
+        weekItemList.add(new WeekItem(R.drawable.stars_test, 14, 3));
+        weekItemList.add(new WeekItem(R.drawable.stars_test, 15, 3));
+
+
+//        db = getReadableDatabase();
+//        String query = "SELECT * FROM " + SAVEGAME_TABLE + " GROUP BY " + COLUMN_SEASON;
+//        Cursor cursor = db.rawQuery(query, null);
+//        cursor.moveToFirst();
+//
+//        do {
+//            weekItemList.add(new WeekItem(R.drawable.stars_test, cursor.getString(cursor.getColumnIndex("season")), cursor.getString(cursor.getColumnIndex("correct")), cursor.getString(cursor.getColumnIndex("incorrect"))));
+//        } while (cursor.moveToNext());
+//
+//        cursor.close();
+        return weekItemList;
+    }
+
     public boolean isPlayedThrough(String season) {
         if (getGamesToPlayCounter(season) > getGamesToPlayTotal(season)) {
             return true;

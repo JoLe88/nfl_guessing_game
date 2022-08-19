@@ -20,14 +20,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 //        dropTableSaveGame();
-//        creatSavegameTable();
+//        createSavegameTable();
 
         Intent intent = new Intent(this, SeasonPickerActivity.class);
         startActivity(intent);
     }
 
 
-    public void creatSavegameTable() {
+    public void createSavegameTable() {
         // create savegameTable
         SQLiteDatabase database = openOrCreateDatabase("nfl_database", MODE_PRIVATE, null);
         database.execSQL("CREATE TABLE IF NOT EXISTS 'savegameTable' ('season' INTEGER PRIMARY KEY, 'allGamesFromSelectedSeasonJSON' TEXT, 'correct' INTEGER, 'incorrect' INTEGER, 'gamesToPlayTotal' TEXT, 'gamesToPlayCounter' TEXT, 'score' TEXT)");
@@ -37,6 +37,33 @@ public class MainActivity extends AppCompatActivity {
 
         do {
             database.execSQL("INSERT INTO 'savegameTable' ('season', 'correct', 'incorrect', 'gamesToPlayTotal', 'gamesToPlayCounter', 'score') VALUES ('" + (cursor.getString(0)) + "', '0', '0', '0', '0', '0');");
+        } while (cursor.moveToNext());
+
+        cursor.close();
+
+        // fill gamesToPlayTotal and gamesToPlayCounter
+        database = openOrCreateDatabase("nfl_database", MODE_PRIVATE, null);
+        for (int i = 1970; i <= 2021; i++) {
+            cursor = database.rawQuery("SELECT COUNT(season) FROM allDetails WHERE season = " + i + " GROUP BY season;", null);
+            cursor.moveToFirst();
+
+            database.execSQL("UPDATE savegameTable SET gamesToPlayTotal = \"" + cursor.getString(0) + "\" WHERE season = \"" + i + "\";");
+            database.execSQL("UPDATE savegameTable SET gamesToPlayCounter = 1;");
+
+//        database.close();
+        }
+    }
+
+    public void creatWeekSavegameTable() {
+        // create savegameTable for a week
+        SQLiteDatabase database = openOrCreateDatabase("nfl_database", MODE_PRIVATE, null);
+        database.execSQL("CREATE TABLE IF NOT EXISTS 'savegameTableWeek' ('week' INTEGER PRIMARY KEY, 'stars' INTEGER, 'playedThrough' INTEGERT)");
+
+        Cursor cursor = database.rawQuery("SELECT season FROM 'allDetails' GROUP BY season", null);
+        cursor.moveToFirst();
+
+        do {
+            database.execSQL("INSERT INTO 'savegameTableWeek' ('week', 'stars', 'playedThrough') VALUES ('" + (cursor.getString(0)) + "', '0', '0');");
         } while (cursor.moveToNext());
 
         cursor.close();
